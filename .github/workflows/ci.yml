@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - feature/**
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  lint-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npx eslint . --ext .ts,.js,.vue
+
+      - name: Run Prettier check
+        run: npx prettier --check .
+
+      - name: Type check (tsc)
+        run: npx vue-tsc --noEmit
+
+      - name: Build
+        run: npm run build
