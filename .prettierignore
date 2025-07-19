@@ -1,0 +1,19 @@
+# 빌드 및 설정 파일 제외
+vite.config.ts
+tailwind.config.js
+.eslintrc.*
+.prettierrc
+*.config.js
+*.config.ts
+
+# GitHub Actions 설정 등 제외
+.github/
+scripts/
+
+# 타입스크립트 설정 제외
+tsconfig*.json
+
+# 빌드 아웃풋 제외
+node_modules/
+dist/
+coverage/
