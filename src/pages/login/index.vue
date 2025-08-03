@@ -37,7 +37,7 @@ interface LoginState {
 }
 
 export default defineComponent({
-  name: 'LoginForm',
+  name: 'LoginPage',
   setup() {
     const state = reactive<LoginState>({
       email: '',
