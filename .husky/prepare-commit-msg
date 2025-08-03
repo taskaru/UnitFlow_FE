@@ -1,0 +1,30 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+COMMIT_MSG_FILE=$1
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+# merge 커밋은 제외
+if [[ "$2" == "merge" ]]; then
+  exit 0
+fi
+
+PREFIX=""
+
+# 브랜치에서 prefix 추출
+if [[ "$BRANCH_NAME" =~ ^feature\/DEV([0-9]{4})_ ]]; then
+  PREFIX="[DEV${BASH_REMATCH[1]}]"
+elif [[ "$BRANCH_NAME" =~ ^fix_ng_([0-9]{4})_ ]]; then
+  PREFIX="[fix_ng_${BASH_REMATCH[1]}]"
+elif [[ "$BRANCH_NAME" =~ ^refactor_([0-9]{4})_ ]]; then
+  PREFIX="[refactor_${BASH_REMATCH[1]}]"
+fi
+
+# 이미 prefix가 포함돼 있지 않은 경우에만 자동 추가
+if [ -n "$PREFIX" ]; then
+  if ! grep -q "^\[$PREFIX" "$COMMIT_MSG_FILE"; then
+    sed -i.bak "1s/^/${PREFIX} /" "$COMMIT_MSG_FILE"
+  fi
+fi
+
+exit 0
