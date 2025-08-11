@@ -15,14 +15,6 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    const state = reactive({
-      title: 'title',
-    });
-
-    return {
-      state,
-    };
-  },
+  setup() {},
 });
 </script>
