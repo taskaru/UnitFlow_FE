@@ -14,7 +14,7 @@ import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
 
 export default defineComponent({
-  name: 'ReportsPage',
+  name: 'BookMarks',
   components: {
     SidebarComponent,
     HeaderComponent,
