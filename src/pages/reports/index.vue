@@ -3,7 +3,9 @@ div.min-h-screen.flex.bg-gradient-to-br.from-blue-50.to-blue-100.p-4
   SidebarComponent
   // 右コンテンツバー
   .bg-white.shadow-xl.rounded-2xl.p-6.w-full.max-w-7xl.transition-all.duration-300.flex.flex-col
-    HeaderComponent
+    HeaderComponent(
+      title='日報'
+    )
     main.flex-1.overflow-y-auto
       RouterView/
 </template>

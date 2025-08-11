@@ -13,7 +13,7 @@ div.flex.bg-gradient-to-br.from-blue-50.to-blue-100.px-3
       span Home
     // 日報
     RouterLink(
-      to="/diary"
+      to="/reports"
       v-slot="{ isActive }"
       class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100"
       :class="isActive ? 'bg-gray-100 font-semibold' : ''"
@@ -31,7 +31,7 @@ div.flex.bg-gradient-to-br.from-blue-50.to-blue-100.px-3
       span タスク
     // ボックマーク
     RouterLink(
-      to="/bookmarks"
+      to="/book-marks"
       v-slot="{ isActive }"
       class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100"
       :class="isActive ? 'bg-gray-100 font-semibold' : ''"
@@ -40,3 +40,9 @@ div.flex.bg-gradient-to-br.from-blue-50.to-blue-100.px-3
       span ブックマーク
 
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({});
+</script>
