@@ -34,6 +34,7 @@ div.min-h-screen.flex.items-center.justify-center.bg-gradient-to-br.from-blue-50
       button.w-full.text-white.py-2.px-4.rounded-lg.shadow-md.transition-transform.transform.mb-5.bg-gray-600(
         type="button"
         class="hover:bg-gray-700 hover:scale-105"
+        @click="handleSignup"
       )
         | サインアップ
       div.w-full.test-white.flex.items-center.justify-center.text-gray-400.underline.decoration-gray-400.cursor-pointer
@@ -52,12 +53,11 @@ interface LoginState {
 export default defineComponent({
   name: 'LoginPage',
   setup() {
+    const router = useRouter();
     const state = reactive<LoginState>({
       email: '',
       password: '',
     });
-
-    const router = useRouter();
 
     function handleLogin(): void {
       // ミドルtodo
@@ -65,9 +65,14 @@ export default defineComponent({
       router.push('/home');
     }
 
+    function handleSignup(): void {
+      router.push('/signup');
+    }
+
     return {
       state,
       handleLogin,
+      handleSignup,
     };
   },
 });
