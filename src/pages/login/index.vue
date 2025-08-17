@@ -42,6 +42,7 @@ div.min-h-screen.flex.items-center.justify-center.bg-gradient-to-br.from-blue-50
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 interface LoginState {
   email: string;
@@ -56,9 +57,12 @@ export default defineComponent({
       password: '',
     });
 
+    const router = useRouter();
+
     function handleLogin(): void {
       // ミドルtodo
       // バックエンドとの通信コードログインに成功したらホームページに履行
+      router.push('/home');
     }
 
     return {

@@ -16,14 +16,14 @@ import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
 
 export default defineComponent({
-  name: 'TasksPage',
+  name: 'BookMarks',
   components: {
     SidebarComponent,
     HeaderComponent,
   },
   setup() {
     const state = reactive({
-      title: 'タスク',
+      title: 'ボックマーク',
     });
 
     return {
