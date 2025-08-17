@@ -17,7 +17,7 @@ module.exports = {
   ],
   plugins: ["vue", "@typescript-eslint"],
   rules: {
-    "no-console": "warn",
+    "no-console": "error",
     "no-debugger": "warn",
     "@typescript-eslint/no-unused-vars": "error",
     "vue/script-setup-uses-vars": "error",
