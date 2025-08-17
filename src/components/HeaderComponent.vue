@@ -15,6 +15,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {},
+  setup() {
+    console.log('header');
+  },
 });
 </script>
