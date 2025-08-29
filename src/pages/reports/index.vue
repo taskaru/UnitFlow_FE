@@ -30,7 +30,7 @@ import { defineComponent, reactive, computed } from 'vue';
 import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
 
-import ReportComponent from '../../components/reports/reportComponent.vue';
+import ReportComponent from '../../components/reports/ReportComponent.vue';
 
 export default defineComponent({
   name: 'ReportsPage',
