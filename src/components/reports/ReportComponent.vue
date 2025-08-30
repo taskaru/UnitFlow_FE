@@ -1,28 +1,25 @@
 <template lang="pug">
-// Card container (square)
 .group.relative.w-full.bg-white.rounded-xl.shadow-md.overflow-hidden
-  // Square ratio via padding-bottom trick
   div(class="relative pb-[100%]")
-    // Hover toolbar (top-left)
-    .absolute.top-2.left-2.flex.gap-2.opacity-0(
-      class="group-hover:opacity-100.transition-opacity.duration-150.z-10"
+    .absolute.top-2.right-2.flex.gap-2.opacity-0(
+      class="group-hover:opacity-100 transition-opacity duration-150 z-10"
     )
       button(
         @click="onBookmark" 
-        class="px-2.py-1.text-xs.bg-white/90.hover:bg-white.rounded-md.shadow.border.border-gray-200"
+        class="px-2 py-1 text-xs bg-white/90 hover:bg-white rounded-md shadow.border border-gray-200"
       ) 🔖
       button(
         @click="onOpen" 
-        class="px-2.py-1.text-xs.bg-white/90.hover:bg-white.rounded-md.shadow.border.border-gray-200"
+        class="px-2 py-1 text-xs bg-white/90 hover:bg-white rounded-md shadow border border-gray-200"
       ) 🔍
       template(v-if="isMine")
         button(
           @click="onEdit" 
-          class="px-2.py-1.text-xs.bg-white/90.hover:bg-white.rounded-md.shadow.border.border-gray-200"
+          class="px-2 py-1 text-xs bg-white/90 hover:bg-white rounded-md shadow border border-gray-200"
         ) ✏️
         button(
           @click="onDelete" 
-          class="px-2.py-1.text-xs.bg-white/90.hover:bg-white.rounded-md.shadow.border.border-gray-200"
+          class="px-2 py-1 text-xs bg-white/90 hover:bg-white rounded-md shadow border border-gray-200"
         ) 🗑️
 
     // Content layer filling the square

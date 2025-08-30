@@ -62,7 +62,7 @@ export default defineComponent({
         todo: [
           {
             id: 1,
-            avatarUrl: 'https://i.pravatar.cc/48?img=1',
+            avatarUrl: '',
             name: 'ジャンジェヨン',
             title: '日報作成',
             description: '今日の進捗をまとめる',
@@ -70,7 +70,7 @@ export default defineComponent({
           },
           {
             id: 2,
-            avatarUrl: 'https://i.pravatar.cc/48?img=2',
+            avatarUrl: '',
             name: 'アオイ',
             title: 'コードレビュー',
             description: 'PR #42 を確認',
@@ -80,7 +80,7 @@ export default defineComponent({
         inProgress: [
           {
             id: 3,
-            avatarUrl: 'https://i.pravatar.cc/48?img=3',
+            avatarUrl: '',
             name: 'タロウ',
             title: 'テストケース追加',
             description: 'レポート機能の単体テスト',
@@ -90,7 +90,7 @@ export default defineComponent({
         done: [
           {
             id: 4,
-            avatarUrl: 'https://i.pravatar.cc/48?img=4',
+            avatarUrl: '',
             name: 'ハナコ',
             title: 'UI 調整',
             description: 'カードのスタイルを微修正',
