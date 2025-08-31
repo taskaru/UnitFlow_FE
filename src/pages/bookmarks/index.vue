@@ -1,12 +1,12 @@
 <template lang="pug">
-div.min-h-screen.flex.bg-gradient-to-br.from-blue-50.to-blue-100.p-4
+div.h-screen.flex.bg-gradient-to-br.from-blue-50.to-blue-100.p-4.overflow-hidden
   SidebarComponent
   // 右コンテンツバー
-  .bg-white.shadow-xl.rounded-2xl.p-6.w-full.max-w-7xl.transition-all.duration-300.flex.flex-col
+  .bg-white.shadow-xl.rounded-2xl.p-6.w-full.max-w-7xl.transition-all.duration-300.flex.flex-col.min-h-0
     HeaderComponent(
       :title="state.title"
     )
-    main.flex-1.overflow-y-auto
+    main.flex-1.overflow-y-auto.min-h-0
       RouterView/
 </template>
 
