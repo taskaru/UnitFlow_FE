@@ -4,10 +4,20 @@
 )
   // 日報カード
   div(
-    class="h-[350px]"
+    class="h-[350px] relative"
     v-for="(data, i) in dataSource"
     :key="i"
+    @mouseenter="showOptions = i"
+    @mouseleave="showOptions = -1"
   )
+    //- もっと見るオプション
+    .absolute.top-2.right-2.z-10
+      MoreOptions(
+        v-show="showOptions === i"
+        @edit="onEdit"
+        @bookmark="onBookMark"
+        @delete="onDelete"
+      )
     // 日報カード
     .w-full.h-full.bg-white.rounded-2xl.shadow-xl.p-2.flex.flex-col
       // name + profile
@@ -26,11 +36,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, ref } from 'vue';
 import { useReportLogic } from '../../composables/reports/logic';
+import MoreOptions from '../common/MoreOptions.vue';
 
 export default defineComponent({
   name: 'ReportComponent',
+  components: {
+    MoreOptions,
+  },
   props: {
     lineNum: {
       type: Number,
@@ -40,6 +54,7 @@ export default defineComponent({
   emits: ['bookmark', 'detail', 'edit', 'delete'],
   setup(props, ctx) {
     const { emit } = ctx;
+    const showOptions = ref(-1);
 
     const { dataSource } = useReportLogic();
 
@@ -73,7 +88,7 @@ export default defineComponent({
       onBookMark,
       onDelete,
       onClickDetail,
-
+      showOptions,
       clampStyle,
     };
   },
