@@ -1,33 +1,50 @@
 <template lang="pug">
-div.min-h-screen.flex.bg-gradient-to-br.from-blue-50.to-blue-100.p-4
+div.h-screen.flex.bg-gradient-to-br.from-blue-50.to-blue-100.p-4.overflow-hidden
   SidebarComponent
-  // 右コンテンツバー
-  .bg-white.shadow-xl.rounded-2xl.p-6.w-full.max-w-7xl.transition-all.duration-300.flex.flex-col
+  // 上コンテンツバー
+  .bg-white.shadow-xl.rounded-2xl.p-6.w-full.transition-all.duration-300.flex.flex-col
     HeaderComponent(
-      :title='state.title'
+      title='日報'
     )
-    main.flex-1.overflow-y-auto
-      RouterView/
+    main.flex-1.overflow-y-auto.min-h-0
+      ReportComponent(
+        :line-num="13"
+      )
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
+
+import ReportComponent from '../../components/reports/ReportComponent.vue';
 
 export default defineComponent({
   name: 'ReportsPage',
   components: {
     SidebarComponent,
     HeaderComponent,
+    ReportComponent,
   },
   setup() {
-    const state = reactive({
-      title: '日報',
-    });
+    const onBookmark = () => {
+      return;
+    };
+    const onOpen = () => {
+      return;
+    };
+    const onEdit = () => {
+      return;
+    };
+    const onDelete = () => {
+      return;
+    };
 
     return {
-      state,
+      onBookmark,
+      onOpen,
+      onEdit,
+      onDelete,
     };
   },
 });

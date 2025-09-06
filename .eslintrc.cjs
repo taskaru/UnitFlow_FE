@@ -26,6 +26,7 @@ module.exports = {
       {
         "ignores": ["index", "Layout"] 
       }
-    ]
+    ],
+    "vue/require-default-prop": "off"
   },
 };
