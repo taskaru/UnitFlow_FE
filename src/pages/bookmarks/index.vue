@@ -1,8 +1,10 @@
 <template lang="pug">
-div.min-h-screen.flex.bg-gradient-to-br.from-blue-50.to-blue-100.p-4
+div.h-screen.flex.bg-black.p-4
   SidebarComponent
   // 右コンテンツバー
-  .bg-white.shadow-xl.rounded-2xl.p-6.w-full.max-w-7xl.transition-all.duration-300.flex.flex-col
+  .wrapper.dark.flex.flex-col(
+    class="w-[87vw]"
+  )
     HeaderComponent(
       :title="state.title"
     )
@@ -23,7 +25,7 @@ export default defineComponent({
   },
   setup() {
     const state = reactive({
-      title: 'ボックマーク',
+      title: 'ブックマーク',
     });
 
     return {

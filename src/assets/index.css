@@ -1,3 +1,179 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root{
+/* 크기·톤 조절용 */
+--width: 10vw;
+--height: 5vw;
+--radius: 0.5vw;
+--tint: rgba(255,255,255,0.16);   /* 유리 틴트 */
+--edge: rgba(255,255,255,0.36);   /* 가장자리 하이라이트 */
+--glow: rgba(255,255,255,0.65);   /* 화살표/글로우 */
+--shadow: rgba(0,0,0,0.45);
+--card-w: 220px;
+--card-h: 340px;
+--bg: #0d0f12;
+--yellow: #FCC419;
+--green: #C1FFE2;
+--green-rgb: 193,255,226;
+--red: #FF6B6B;
+--red-rgb: 255,107,107;
+--tw-text-opacity: 1;
+--tw-border-opacity: 0.3;
+}
+
+.color-yellow {
+    color: var(--yellow);
+}
+.bg-primary {
+    background-color: var(--green);
+}
+  
+/* 유리 원형 버튼 */
+.glass-icon-btn{
+  position: relative;
+  width: 2vw;
+  height: 2vw;
+  border-radius: var(--radius);;
+  border: 1px solid var(--edge);
+  background:
+    var(--icon) center/ 1.8vw 1.8vw no-repeat,
+    radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.45), rgba(255,255,255,0.12) 40%, rgba(255,255,255,0.04) 70%, rgba(255,255,255,0) 100%),
+    linear-gradient(160deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 12px 28px -8px var(--shadow),
+    inset 0 2px 3px rgba(255,255,255,0.35),
+    inset 0 -8px 16px rgba(0,0,0,0.20);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+}
+
+/* 외곽 유리 림/하이라이트 */
+.glass-icon-btn::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:inherit;
+  background:
+    radial-gradient(90% 90% at 30% 20%, rgba(255,255,255,0.45), transparent 60%),
+    radial-gradient(90% 90% at 70% 75%, rgba(255,255,255,0.12), transparent 70%);
+  mix-blend-mode: screen;
+  pointer-events:none;
+}
+
+/* 눌림/호버 상태 */
+.glass-icon-btn:hover{
+  box-shadow:
+    0 14px 32px -8px rgba(0,0,0,0.55),
+    inset 0 3px 4px rgba(255,255,255,0.45),
+    inset 0 -10px 18px rgba(0,0,0,0.22);
+}
+.glass-icon-btn:active{ 
+  transform: translateY(1px) scale(0.985); 
+}
+
+/* 포커스 접근성 */
+.glass-icon-btn:focus-visible{
+  outline: 2px solid rgba(255,255,255,0.75);
+  outline-offset: 4px;
+}
+
+/* 하단 홈버튼(유리 원형) */
+.home-btn{
+  position:absolute; bottom: 26px; left:50%; transform: translateX(-50%);
+  width: 60px; height: 60px; border-radius:50%;
+  background: radial-gradient(70% 70% at 35% 25%, rgba(255,255,255,0.35), rgba(255,255,255,0.05) 60%, transparent 100%);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,0.45),
+    inset 0 -10px 18px rgba(0,0,0,0.28),
+    0 8px 22px rgba(0,0,0,0.55);
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5vw;
+  font-size: 1vw;
+  font-weight: 500;
+}
+
+.wrapper .label {
+  letter-spacing: 1px;
+}
+
+/* 다크 스타일 */
+.wrapper.dark {
+  gap: 0.5vw;
+  border-radius: 0.5vw;
+  background: #1a1a1a;
+  color: white;
+  box-shadow:
+    inset 2px 2px 5px rgba(255, 255, 255, 0.1),
+    inset -2px -2px 8px rgba(0, 0, 0, 0.6),
+    0 10px 20px rgba(0,0,0,0.6);
+}
+
+/* 라이트 스타일 */
+.wrapper.light {
+  border-radius: var(--radius);
+  background: linear-gradient(#d9d9d9, #c4c4c4);
+  color: #444;
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.2),
+    0 8px 18px rgba(0,0,0,0.15);
+}
+
+.task-category-container {
+  padding: 1vw;
+  border-radius: var(--radius);
+  background: linear-gradient(#1a1a1a, #222222);
+  color: #444;
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.086),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.2),
+    0 8px 18px rgba(0,0,0,0.15);
+}
+
+.border-red {
+  padding-top: 0.15vw;
+  padding-bottom: 0.15vw;
+  padding-left: 0.25vw;
+  padding-right: 0.25vw;
+  text-align: center;
+  font-size: 0.8vw;
+  color: rgb(253 164 175 / var(--tw-text-opacity, 1));
+  border-width: 0.1vw;
+  border-radius: 80vw;
+  border-color: rgb(244 63 94 / var(--tw-border-opacity, 1));
+}
+
+.border-green {
+  padding-top: 0.15vw;
+  padding-bottom: 0.15vw;
+  padding-left: 0.15vw;
+  padding-right: 0.15vw;
+  text-align: center;
+  font-size: 0.8vw;
+  color: rgb(110 231 183 / var(--tw-text-opacity, 1));
+  border-width: 0.1vw;
+  border-radius: 80vw;
+  border-color: rgb(16 185 129 / var(--tw-border-opacity, 1));
+}
+
+.border-yellow {
+  padding-top: 0.15vw;
+  padding-bottom: 0.15vw;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
+  text-align: center;
+  font-size: 0.8vw;
+  color: rgb(254 240 138 / var(--tw-text-opacity, 1));
+  border-width: 0.1vw;
+  border-radius: 80vw;
+  border-color: rgb(250 204 21 / var(--tw-border-opacity, 1));
+}

@@ -1,13 +1,39 @@
 <template lang="pug">
-div.text-lg.font-bold
-  | my page
+div.h-screen.flex.bg-black.p-4
+  SidebarComponent
+  // 右コンテンツバー
+  .wrapper.dark.flex.flex-col(
+    class="w-[87vw]"
+  )
+    HeaderComponent(
+      :title="state.title"
+    )
+    main.flex-1.overflow-y-auto
+      TaskEditor/
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import SidebarComponent from '../../components/SidebarComponent.vue';
+import HeaderComponent from '../../components/HeaderComponent.vue';
+import { defineComponent, reactive } from 'vue';
 
 /* eslint-disable vue/multi-word-component-names */
 export default defineComponent({
   name: 'Mypage',
+
+  components: {
+    SidebarComponent,
+    HeaderComponent,
+  },
+
+  setup() {
+    const state = reactive({
+      title: 'マイページ',
+    });
+
+    return {
+      state,
+    };
+  },
 });
 </script>

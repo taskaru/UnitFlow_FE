@@ -11,25 +11,25 @@ div.h-screen.flex.bg-black.p-4
     main.flex-1.overflow-y-auto(
       class="w-[83vw]"
     )
-      TaskEditor_v2/
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
 import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
-import TaskEditor_v2 from './TaskEditor_v2.vue';
+import { defineComponent, reactive } from 'vue';
 
+/* eslint-disable vue/multi-word-component-names */
 export default defineComponent({
-  name: 'TasksPage',
+  name: 'WBSPage',
+
   components: {
     SidebarComponent,
     HeaderComponent,
-    TaskEditor_v2,
   },
+
   setup() {
     const state = reactive({
-      title: 'タスク',
+      title: 'WBS',
     });
 
     return {

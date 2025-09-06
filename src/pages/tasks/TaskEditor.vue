@@ -1,111 +1,152 @@
 <template lang="pug">
   main.flex-1.overflow-hidden
     // 入力エリア
-    .bg-gray-50.rounded-xl.p-4.flex.flex-col.gap-4.mb-3
-      div(class="grid grid-cols-1 md:grid-cols-3 gap-3")
-        div(class="flex flex-col")
-          label.text-sm.text-gray-600.mb-1.ml-1 カテゴリ
-          input.form-input.border.rounded-lg.p-2(
-            v-model.trim="newTask.category"
-            placeholder="例）DEV012345"
-            @keyup.enter="tryAddTask"
+    .flex.mb-1.items-center.justify-between
+      .flex.flex-col(
+        class="w-[40vw] h-[4vw] p-[0.2vw]"
+      )
+        input.wrapper.dark(
+          v-model.trim="newTask.category"
+          placeholder="例）DEV012345"
+          class="h-[4vw] focus:placeholder-[#ffffff] placeholder-[#a1a1a1] focus:outline-none"
+          @keyup.enter="tryAddTask"
+        )
+      .flex.flex-col(
+        class="w-[40vw] h-[4vw] p-[0.2vw]"
+      )
+        input.wrapper.dark(
+          v-model.trim="newTask.name"
+          placeholder="例）PRレビュー / テストケース作成 など"
+          @keyup.enter="tryAddTask"
+          class="h-[4vw] focus:placeholder-[#ffffff] placeholder-[#a1a1a1] focus:outline-none"
           )
-        div(class="flex flex-col md:col-span-2")
-          label.text-sm.text-gray-600.mb-1.ml-1 タスク名
-          input.form-input.border.rounded-lg.p-2(
-            v-model.trim="newTask.name"
-            placeholder="例）PRレビュー / テストケース作成 など"
-            @keyup.enter="tryAddTask"
-          )
-      .flex.flex-col
-        button.btn-primary(@click="tryAddTask") 追加
-        span.text-sm.text-red-500(v-if="errors.input") {{ errors.input }}
-    //タスク一覧タイトル    
-    .flex.flex-col
-      .flex.items-center.justify-between.border-b.pb-1.mb-2
-        h2.text-lg.font-semibold タスク一覧
-        .flex.items-center.gap-2
-          button.btn-secondary(
-            @click="toggleAll(false)"
-            :disabled="!tasks.length"
-          ) 全て未完了に
-          button.btn-secondary(
-            @click="toggleAll(true)"
-            :disabled="!tasks.length"
-          ) 全て完了に
+      .glass-icon-btn(
+        @click="tryAddTask"
+        aria-label="追加"
+      )
+        img(
+          src="https://img.icons8.com/?size=100&id=1OvPrBUWbMke&format=png&color=000000"
+        )
+    span.text-sm.text-red-500.mx-2(
+      v-if="errors.input"
+    ) 
+      |  {{ errors.input }}
+
+    // タスクボタン（全体用）
+    .flex.justify-end.m-1
+      .flex
+        button.cta(
+          class="w-[4vw] h-[2vw] text-stone-600"
+          @click="toggleAll(false)"
+          :disabled="!tasks.length"
+        ) 未完了
+        button.cta(
+          class="w-[3vw] h-[2vw] text-stone-600"
+          @click="toggleAll(true)"
+          :disabled="!tasks.length"
+        ) 完了
 
     // タスクリスト
-    .flex-1.overflow-y-auto.max-h-80
+    .flex-1.overflow-y-auto(class="h-[66vh]")
       template(v-if="grouped.length")
         // カテゴリごと
-        .space-y-4.p-2
-          .border.rounded-xl.p-4.bg-white(
+        .space-y-4
+          .task-category-container(
             v-for="group in grouped"
             :key="group.category"
           )
             .flex.items-center.justify-between.mb-3
-              h3.font-semibold.text-gray-800 {{ group.category || '未分類' }}
-              span.text-sm.text-gray-500 {{ group.completed }}/{{ group.tasks.length }} 完了
-            ul.divide-y
+              h3.font-semibold.text-stone-400 {{ group.category || '未分類' }}
+              span.text-sm.text-stone-600 {{ group.completed }}/{{ group.tasks.length }} 完了
+            ul
               li.py-2.flex.items-start.justify-between.gap-3(
                 v-for="task in group.tasks"
                 :key="task.id"
               )
                 label.flex.items-start.gap-3.cursor-pointer.select-none
                   input(
+                    class="mt-[0.2vw]"
                     type="checkbox"
                     v-model="task.completed"
                     @change="onToggle(task)"
                     :disabled="task.completed"
                   )
                   .flex.flex-col
-                    span.font-medium.text-gray-900 {{ task.name }}
-                    span.text-xs.text-gray-400 作成: {{ formatDate(task.createdAt) }}
-                    span.text-xs.text-emerald-600(v-if="task.completedAt")
+                    span.font-medium.text-white {{ task.name }}
+                    span.text-xs.text-stone-400 作成: {{ formatDate(task.createdAt) }}
+                    span.text-xs.mt-1(
+                      v-if="task.completedAt"
+                      class="text-[#c1ffe2]"
+                      )
                       | 完了: {{ formatDate(task.completedAt) }}
                 .flex.items-center.gap-2
-                  button.text-xs.text-blue-600.hover.underline(
+                  button(
                     @click="editTask(task)"
                     :disabled="task.completed"
-                  ) 編集
-                  button.text-xs.text-red-600.hover.underline(
+                    class="p-1 rounded transition-colors"
+                    :class="task.completed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-600'"
+                    title="編集"
+                  )
+                    img(
+                      src="https://img.icons8.com/?size=100&id=7dEB2atIqO6T&format=png&color=000000"
+                      class="w-5 h-5 object-contain"
+                    )
+                  button(
                     @click="removeTask(task.id)"
                     :disabled="task.completed"
-                  ) 削除
+                    class="p-1 rounded transition-colors"
+                    :class="task.completed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600'"
+                    title="削除"
+                  )
+                    img(
+                      src="https://img.icons8.com/?size=100&id=CzTISLkmHrKE&format=png&color=000000"
+                      class="w-5 h-5 object-contain"
+                    )
       template(v-else)
-        .text-gray-500.text-sm まだタスクがありません。上のフォームから追加してください。
+        .text-stone-800.text-sm まだタスクがありません。上のフォームから追加してください。
 
   // フッター操作
-  .flex.items-center.justify-between
+  .flex.items-center.justify-between.m-4
     // 進捗バー
-    div.w-40.h-2.bg-gray-200.rounded
-      div.h-2.bg-neutral-500.rounded(:style="{ width: progressRate + '%' }")
-
-    .text-sm.text-gray-600.flex.items-center.gap-4
-      span
-        | 完了済み:
-        span.font-semibold {{ completedCount }}
-        |  / 合計:
-        span.font-semibold {{ tasks.length }}
-      span
-        | 進捗率:
-        span.font-semibold {{ progressRate }}%
-
+    .flex.items-center
+      .w-40.h-2.bg-stone-400.rounded
+        .h-2.rounded(
+          class="bg-[#c1ffe2]"
+          :style="{ width: progressRate + '%' }"
+        )
+      .text-stone-400.font-semibold.ml-1 {{ progressRate }}%
     .flex.items-center.gap-3
-      button.btn-apply(
+      button.btn-apply.wrapper.dark(
+        class="text-[#c1ffe2]"
         @click="goToReport"
-        :disabled="!completedCount"
-      ) 退勤 → 日報作成へ
+        :disabled="!tasks.length"
+      ) 
+        img(
+          src="https://img.icons8.com/?size=100&id=aZCcxa9TqPy7&format=png&color=000000"
+          class="w-6 h-6 object-contain"
+        )
+  TaskModal(
+    :visible="showModal"
+    :tasks="tasks"
+    :grouped="grouped"
+    :completedCount="completedCount"
+    :progressRate="progressRate"
+    :formatDate="formatDate"
+    :onToggle="onToggle"
+    @close="closeModal"
+    @confirm="confirmAndGo"
+  )
+
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, onMounted } from 'vue';
+import { defineComponent, reactive, computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
-
+import TaskModal from './TaskModal.vue';
 // タスク型定義
-type Task = {
+export type Task = {
   id: string; // 一意のID
   category: string; // カテゴリ
   name: string; // タスク名
@@ -118,7 +159,7 @@ const STORAGE_KEY = 'tasks_v1';
 
 export default defineComponent({
   name: 'TasksPage',
-  components: { SidebarComponent, HeaderComponent },
+  components: { SidebarComponent, HeaderComponent, TaskModal },
   setup() {
     const router = useRouter();
 
@@ -133,6 +174,9 @@ export default defineComponent({
 
     // 入力エラーメッセージ
     const errors = reactive<{ input?: string }>({});
+
+    // モーダル表示状態
+    const showModal = ref(false);
 
     /**
      * 現在のタスク配列を localStorage に保存する
@@ -298,10 +342,23 @@ export default defineComponent({
     };
 
     /**
-     * 完了済みタスクをセッションストレージに保存し、
-     * DailyReport ページに遷移する
+     * モーダルを開く
      */
-    const goToReport = () => {
+    const openModal = () => {
+      showModal.value = true;
+    };
+
+    /**
+     * モーダルを閉じる
+     */
+    const closeModal = () => {
+      showModal.value = false;
+    };
+
+    /**
+     * モーダルで確認後、レポートページに遷移
+     */
+    const confirmAndGo = () => {
       const payload = completed.value.map(t => ({
         id: t.id,
         category: t.category,
@@ -314,11 +371,20 @@ export default defineComponent({
       router.push({ name: 'ReportsPage' });
     };
 
+    /**
+     * 完了済みタスクをセッションストレージに保存し、
+     * DailyReport ページに遷移する
+     */
+    const goToReport = () => {
+      openModal();
+    };
+
     return {
       state,
       tasks,
       newTask,
       errors,
+      showModal,
       tryAddTask,
       removeTask,
       editTask,
@@ -329,6 +395,8 @@ export default defineComponent({
       onToggle,
       formatDate,
       goToReport,
+      closeModal,
+      confirmAndGo,
     };
   },
 });
