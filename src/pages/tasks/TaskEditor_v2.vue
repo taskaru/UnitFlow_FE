@@ -1,23 +1,23 @@
 <template lang="pug">
   main.flex-1.overflow-hidden
     // 入力エリア
-    .flex.mb-1.items-center.justify-between
+    .flex.mb-1.items-center.justify-between.px-4
       // カテゴリ
-      .flex.flex-col(class="w-[26vw] h-[4vw] p-[0.2vw]")
+      .flex.flex-col(class="w-[22vw] h-[3.6vw]")
         input.wrapper.dark(
           v-model.trim="newTask.category"
           placeholder="例）DEV012345"
           class="h-[4vw] focus:placeholder-[#ffffff] placeholder-[#a1a1a1] focus:outline-none"
         )
       // タスク名
-      .flex.flex-col(class="w-[32vw] h-[4vw] p-[0.2vw]")
+      .flex.flex-col(class="w-[46vw] h-[3.6vw] px-[0.4vw]")
         input.wrapper.dark(
           v-model.trim="newTask.name"
           placeholder="例）PRレビュー / テストケース作成 など"
           class="h-[4vw] focus:placeholder-[#ffffff] placeholder-[#a1a1a1] focus:outline-none"
         )
       // 目標完了時刻
-      .flex.flex-col(class="w-[20vw] h-[4vw] p-[0.2vw]")
+      .flex.flex-col(class="w-[12.4vw] h-[3.6vw]")
         input.wrapper.dark(
           type="time"
           v-model="newTask.targetLocal"
@@ -26,13 +26,19 @@
           @keyup.enter="tryAddTask"
         )
       // 追加
-      .glass-icon-btn(@click="tryAddTask" aria-label="追加")
+      .glass-icon-btn(
+        @click="tryAddTask" 
+        aria-label="追加"
+      )
         img(src="https://img.icons8.com/?size=100&id=1OvPrBUWbMke&format=png&color=000000")
 
     span.text-sm.text-red-500.mx-2(v-if="errors.input") {{ errors.input }}
 
     // タスクボタン（全体用）
-    .flex.justify-end.m-1
+    .flex.justify-between.items-center.mx-3.mt-4.py-1
+      .border-yellow.mx-1
+        | 現在: 
+        span.font-mono {{ formatDate(nowIso, 'time') }}
       .flex
         button.cta(
           class="w-[4vw] h-[2vw] text-stone-600"
@@ -49,7 +55,7 @@
     .flex-1.overflow-y-auto(class="h-[66vh]")
       template(v-if="grouped.length")
         // カテゴリごと
-        .space-y-4
+        .space-y-4.px-4
           .task-category-container(
             v-for="group in grouped"
             :key="group.category"
@@ -63,7 +69,7 @@
                 :key="task.id"
               )
                 // 左側：チェック + 情報
-                label.flex.items-start.gap-3.cursor-pointer.select-none
+                .flex.items-start.gap-3
                   input(
                     class="mt-[0.2vw] accent-emerald-200"
                     type="checkbox"
@@ -71,7 +77,20 @@
                     @change="onToggle(task)"
                   )
                   .flex.flex-col
-                    span.font-medium.text-white {{ task.name }}
+                    .flex
+                      span.font-medium.text-white.mr-2 {{ task.name }}
+                      button.border-red(
+                        v-if="needsExtension(task) && ui.extendFor !== task.id"
+                        @click="openExtend(task)"
+                      ) 延長(30分)
+                      .border-red(
+                        class="w-[3.5vw]"
+                        v-if="hasNotes(task) && !task.completedAt"
+                      ) 遅延中
+                      .border-green(
+                        class="w-[3.5vw]"
+                        v-if="task.completedAt"
+                      ) 完了
                     // 予定/作成
                     span.text-xs.mt-1(
                       :class="isOverdue(task) ? 'text-rose-400' : 'text-stone-400'"
@@ -96,36 +115,46 @@
                         | 理由: {{ n.reason }}
                         br(v-if="n.oldTargetTime && n.newTargetTime")
                         | 予定変更: {{ formatDate(n.oldTargetTime, 'time') }} → {{ formatDate(n.newTargetTime, 'time') }}
-
-                // 右側:延長UI
+                    .w-80.py-1(v-if="ui.extendFor === task.id")
+                      textarea.w-full.h-16.p-2.rounded.bg-white.bg-opacity-5.border.border-white.border-opacity-10.text-xs.text-white.placeholder-gray-400(
+                        v-model.trim="ui.reason"
+                        placeholder="なぜ遅延していますか？（必須）"
+                      )
+                      .flex.justify-end.gap-2.mt-1
+                        //- button.text-xs.px-2.py-1.rounded.bg-stone-600.text-white(
+                        //-   @click="cancelExtend"
+                        //- ) キャンセル
+                        button.w-full.border-red(
+                          :disabled="!ui.reason"
+                          @click="confirmExtend(task)"
+                        ) 保存して延長
+                // 右側:延長UI + 編集・削除ボタン
                 .flex.flex-col.items-end.gap-2
-                  button.w-full.border-yellow(
-                    v-if="needsExtension(task) && ui.extendFor !== task.id"
-                    @click="openExtend(task)"
-                  ) 延長(30分)
-                  .border-red(
-                    class="w-[3.5vw]"
-                    v-if="hasNotes(task) && !task.completedAt"
-                  ) 遅延中
-                  .border-green(
-                    class="w-[3.5vw]"
-                    v-if="task.completedAt"
-                  ) 完了
-                  .w-48.pr-2(v-if="ui.extendFor === task.id")
-                    textarea.w-full.h-16.p-2.rounded.bg-white.bg-opacity-5.border.border-white.border-opacity-10.text-xs.text-white.placeholder-gray-400(
-                      v-model.trim="ui.reason"
-                      placeholder="なぜ遅延していますか？（必須）"
+                  .flex.items-center
+                    button(
+                      @click="editTask(task)"
+                      :disabled="task.completed"
+                      class="p-1 rounded transition-colors"
+                      :class="task.completed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-600'"
+                      title="編集"
                     )
-                    .flex.justify-end.gap-2.mt-1
-                      //- button.text-xs.px-2.py-1.rounded.bg-stone-600.text-white(
-                      //-   @click="cancelExtend"
-                      //- ) キャンセル
-                      button.w-full.border-red(
-                        :disabled="!ui.reason"
-                        @click="confirmExtend(task)"
-                      ) 保存して延長
+                      img(
+                        src="https://img.icons8.com/?size=100&id=7dEB2atIqO6T&format=png&color=000000"
+                        class="w-4 h-4 object-contain"
+                      )
+                    button(
+                      @click="removeTask(task.id)"
+                      :disabled="task.completed"
+                      class="p-1 rounded transition-colors"
+                      :class="task.completed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600'"
+                      title="削除"
+                    )
+                      img(
+                        src="https://img.icons8.com/?size=100&id=CzTISLkmHrKE&format=png&color=000000"
+                        class="w-4 h-4 object-contain"
+                      )
       template(v-else)
-        .text-stone-800.text-sm まだタスクがありません。上のフォームから追加してください。
+        .text-stone-600.text-sm.px-3 まだタスクがありません。上のフォームから追加してください。
 
   // フッター操作
   .flex.items-center.justify-between.m-4
@@ -137,9 +166,6 @@
           :style="{ width: progressRate + '%' }"
         )
       .text-stone-400.font-semibold.ml-1 {{ progressRate }}%
-      .text-xs.text-stone-500.ml-3 
-        | 現在: 
-        span.font-mono {{ formatDate(nowIso, 'time') }}
     // レポートへ（任意）
     .flex.items-center.gap-3
       button.btn-apply.wrapper.dark(
@@ -178,12 +204,12 @@ import TaskModal from './TaskModal.vue';
 
 // タスク型定義
 export type Task = {
-  id: string;
-  category: string;
-  name: string;
-  completed: boolean;
-  createdAt: string;
-  completedAt?: string;
+  id: string; // 一意のID
+  category: string; // カテゴリ
+  name: string; // タスク名
+  completed: boolean; // 完了フラグ
+  createdAt: string; // 作成日時 (ISO)
+  completedAt?: string; // 完了日時 (ISO、オプション)
   targetIso?: string;
 
   // 延長用
@@ -229,10 +255,16 @@ export default defineComponent({
     // モーダル表示状態
     const showModal = ref(false);
 
-    // 保存/読込
+    /**
+     * 現在のタスク配列を localStorage に保存する
+     */
     const save = () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     };
+
+    /**
+     * localStorage からタスクを読み込み、tasks に展開する
+     */
     const load = () => {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
@@ -251,7 +283,10 @@ export default defineComponent({
       if (timer) clearInterval(timer);
     });
 
-    // 新規タスク追加
+    /**
+     * 入力されたカテゴリとタスク名から新しいタスクを作成して追加する
+     * 両方の入力が空の場合はエラーを表示
+     */
     const tryAddTask = () => {
       errors.input = '';
       if (!newTask.category || !newTask.name) {
@@ -309,10 +344,14 @@ export default defineComponent({
       save();
     };
 
-    // 一括トグル
+    /**
+     * - done === true のとき: 未完了だけ完了にし、completedAt を「今」に設定（既に完了のものは触らない）
+     * - done === false のとき: 完了だけ未完了にし、completedAt を削除（既に未完了のものは触らない）
+     */
     const toggleAll = (done: boolean) => {
       const nowIsoStr = new Date().toISOString();
       if (done) {
+        // 「全て完了に」→ 未完了のみ完了扱い＆完了時刻を新規記録
         tasks.forEach(t => {
           if (!t.completed) {
             t.completed = true;
@@ -320,6 +359,7 @@ export default defineComponent({
           }
         });
       } else {
+        // 「全て未完了に」→ 完了のみ未完了に戻し＆完了時刻は消す
         tasks.forEach(t => {
           if (t.completed) {
             t.completed = false;
@@ -330,31 +370,49 @@ export default defineComponent({
       save();
     };
 
-    // 完了済みなど
+    /**
+     * 完了済みのタスクだけを返す computed プロパティ
+     */
     const completed = computed(() => tasks.filter(t => t.completed));
+
+    /**
+     * 完了済みタスクの件数を返す computed プロパティ
+     */
     const completedCount = computed(() => completed.value.length);
+
+    /**
+     * 全体に対する完了済みタスクの割合をパーセンテージで返す
+     */
     const progressRate = computed(() =>
       !tasks.length
         ? 0
         : Math.round((completedCount.value / tasks.length) * 100)
     );
 
-    // 並び替えキー：目標→なければ作成時刻
+    /**
+     * 並び替えキー：目標→なければ作成時刻
+     */
     const targetKey = (t: Task) =>
       t.targetAt ? Date.parse(t.targetAt) : Date.parse(t.createdAt);
 
-    // 期限超過チェック
+    /**
+     * 期限超過チェック
+     */
     const isOverdue = (t: Task) => {
       if (!t.targetAt || t.completed) return false;
       return Date.parse(t.targetAt) < now.value.getTime();
     };
 
-    // 延長が必要なタスクかチェック
+    /**
+     * 延長が必要なタスクかチェック
+     */
     const needsExtension = (t: Task) => {
       return isOverdue(t) && !t.completed;
     };
 
-    // クリックトグル
+    /**
+     * クリックトグル
+     */
     const onToggle = (t: Task) => {
       if (t.completed) {
         t.completedAt = new Date().toISOString();
@@ -364,7 +422,9 @@ export default defineComponent({
       save();
     };
 
-    // グルーピング（予定順で tasksSorted を提供）
+    /**
+     * グルーピング（予定順で tasksSorted を提供）
+     */
     const grouped = computed(() => {
       const map = new Map<string, Task[]>();
       for (const t of tasks) {
@@ -387,18 +447,25 @@ export default defineComponent({
         });
     });
 
-    // 延長UI管理
+    /**
+     * 延長UI管理
+     */
     const openExtend = (t: Task) => {
       ui.extendFor = t.id;
       ui.reason = '';
     };
 
+    /**
+     * 延長UIを解除
+     */
     const cancelExtend = () => {
       ui.extendFor = null;
       ui.reason = '';
     };
 
-    // 30分延長（遅延時間基準で後続タスクも連鎖延長）
+    /**
+     * 30分延長（遅延時間基準で後続タスクも連鎖延長）
+     */
     const extendTaskAndFollowing = (
       base: Task,
       minutes: number,
