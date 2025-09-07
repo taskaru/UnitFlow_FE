@@ -9,7 +9,7 @@ div.h-screen.flex.bg-black.p-4
       :title="state.title"
     )
     main.flex-1.overflow-y-auto(
-      class="w-[83vw]"
+      class="w-[85vw]"
     )
       TaskEditor_v2/
 </template>
