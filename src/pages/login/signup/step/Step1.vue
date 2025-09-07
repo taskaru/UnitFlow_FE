@@ -101,6 +101,7 @@ export default defineComponent({
       passwordConfirm: '',
     });
 
+    // メールの形式が正しいかどうか
     const validateEmail = () => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!formData.email) {
@@ -112,6 +113,7 @@ export default defineComponent({
       }
     };
 
+    // パスワード検査
     const validatePassword = () => {
       if (!formData.password) {
         errors.password = 'パスワードを入力してください';
@@ -123,6 +125,7 @@ export default defineComponent({
       validatePasswordConfirm();
     };
 
+    // パスワード確認検査
     const validatePasswordConfirm = () => {
       if (!formData.passwordConfirm) {
         errors.passwordConfirm = 'パスワード確認を入力してください';
@@ -133,6 +136,7 @@ export default defineComponent({
       }
     };
 
+    // 次のステップに行けるかどうか
     const isStepValid = computed(() => {
       return (
         formData.email &&

@@ -8,7 +8,7 @@ div.h-screen.flex.bg-black.p-4
     HeaderComponent(
       :title='state.title'
     )
-    main.flex-1.overflow-y-auto
+    main.flex-1.overflow-y-auto.min-h-0
       RouterView/
 </template>
 
