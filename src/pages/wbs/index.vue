@@ -11,12 +11,14 @@ div.h-screen.flex.bg-black.p-4
     main.flex-1.overflow-y-auto(
       class="w-[83vw]"
     )
+      WBS/
 </template>
 
 <script lang="ts">
 import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
 import { defineComponent, reactive } from 'vue';
+import WBS from './WBS.vue';
 
 /* eslint-disable vue/multi-word-component-names */
 export default defineComponent({
@@ -25,6 +27,7 @@ export default defineComponent({
   components: {
     SidebarComponent,
     HeaderComponent,
+    WBS,
   },
 
   setup() {
