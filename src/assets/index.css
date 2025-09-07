@@ -15,7 +15,7 @@
   --card-h: 340px;
   --bg: #0d0f12;
   --yellow: rgb(254 240 138 / var(--tw-text-opacity, 1));
-  --green:  rgb(110 231 183 / var(--tw-text-opacity, 1)); /* #c1ffe2 */
+  --green: rgb(110 231 183 / var(--tw-text-opacity, 1)); /* #c1ffe2 */
   --green-rgb: 193, 255, 226;
   --red: rgb(253 164 175 / var(--tw-text-opacity, 1)); /* #ff6b6b */
   --red-rgb: 255, 107, 107;
