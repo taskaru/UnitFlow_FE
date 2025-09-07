@@ -6,6 +6,7 @@ import Reports from '../pages/reports/index.vue';
 import Tasks from '../pages/tasks/index.vue';
 import BookMarks from '../pages/bookmarks/index.vue';
 import MyPage from '../pages/mypage/index.vue';
+import WBSPage from '../pages/wbs/index.vue';
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/my-page',
     name: 'MyPage',
     component: MyPage,
+  },
+  {
+    path: '/wbs',
+    name: 'WBSPage',
+    component: WBSPage,
   },
 ];
 

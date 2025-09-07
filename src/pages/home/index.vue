@@ -1,8 +1,10 @@
 <template lang="pug">
-div.h-screen.flex.bg-gradient-to-br.from-blue-50.to-blue-100.p-4.overflow-hidden
+div.h-screen.flex.bg-black.p-4
   SidebarComponent
   // 右コンテンツバー
-  .bg-white.shadow-xl.rounded-2xl.p-6.w-full.transition-all.duration-300.flex.flex-col.min-h-0
+  .wrapper.dark.flex.flex-col(
+    class="w-[87vw]"
+  )
     HeaderComponent(
       :title='state.title'
     )
