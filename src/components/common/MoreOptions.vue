@@ -10,19 +10,26 @@
   transition(name="fade")
     div(
       v-if="show"
-      class="w-40 flex flex-col absolute bg-[#1a1a1a] text-white border border-gray-600 rounded-md top-9 -right-5 z-10 overflow-hidden"
+      class="w-40 flex flex-col absolute bg-[#1a1a1a] text-white border border-gray-600 rounded-md top-11 -right-5 z-10"
     )
+      //- Triangle
+      .absolute.w-3.h-3.border-t.border-l.border-gray-600.overflow-hidden.z-0(
+        class="top-[-0.4rem] right-[1.6rem] rotate-45 bg-[#1a1a1a]"
+      )
+      //- Menu items
       transition-group(
         name="staggered-fade"
         tag="div"
         appear
+        class="overflow-hidden rounded-md relative z-10"
       )
-        .w-full.flex.justify-center.items-center.cursor-pointer.py-3.px-2(
-          v-for="(item, index) in menuItems"
-          :key="item"
+        .w-full.flex.justify-center.items-center.cursor-pointer.py-3.px-2.border-b.border-gray-600(
+          v-for="(menu, index) in menus"
+          :key="menu"
           :style="{ '--i': index }"
           class="hover:bg-gray-700"
-        ) {{ item }}
+          @click="handleMenuClick(menu)"
+        ) {{ menu }}
 </template>
 
 <script lang="ts">
@@ -36,24 +43,50 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['edit', 'bookmark', 'delete'],
-  setup() {
+  emits: ['edit', 'bookmark', 'delete', 'detail'],
+  setup(_, { emit }) {
     const show = ref(false);
-    const menuItems = ref(['ブックマーク', '編集', '削除', 'コピー']);
+    const menus = ref(['ブックマーク', '編集', '削除', '詳細']);
     const moreOptionsRef = ref<HTMLElement | null>(null);
 
-    const onClickToggle = () => {
-      show.value = !show.value;
+    const eventMap: { [key: string]: string } = {
+      ブックマーク: 'bookmark',
+      編集: 'edit',
+      削除: 'delete',
+      詳細: 'detail',
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
+    /**
+     * メニュー項目をクリックした際の処理
+     * @param {string} menu - クリックされたメニューのテキスト
+     */
+    function handleMenuClick(menu: string) {
+      const eventName = eventMap[menu];
+      if (eventName) {
+        emit(eventName as 'edit' | 'bookmark' | 'delete' | 'detail');
+      }
+      show.value = false;
+    }
+
+    /**
+     * もっと見るボタンの表示・非表示を切り替える
+     */
+    function onClickToggle() {
+      show.value = !show.value;
+    }
+
+    /**
+     * コンポーネントの外側をクリックした際にメニューを閉じる
+     * @param {MouseEvent} event - マウスイベント
+     */
+    function handleClickOutside(event: MouseEvent) {
       if (
         moreOptionsRef.value &&
         !moreOptionsRef.value.contains(event.target as Node)
       ) {
         show.value = false;
       }
-    };
+    }
 
     watch(show, value => {
       if (value) {
@@ -69,9 +102,10 @@ export default defineComponent({
 
     return {
       show,
-      menuItems,
+      menus,
       onClickToggle,
       moreOptionsRef,
+      handleMenuClick,
     };
   },
 });
