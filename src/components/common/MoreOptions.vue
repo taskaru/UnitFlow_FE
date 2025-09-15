@@ -1,38 +1,48 @@
 <template lang="pug">
-.relative.inline-block(ref="moreOptionsRef")
-  div(@click="toggle")
-    //- 3点リーダー
-    .w-8.h-8.flex.items-center.justify-center.cursor-pointer
-      .text-2xl.font-bold ...
+.relative(ref="moreOptionsRef")
+  //- もっと見るボタン
+  span.block.text-4xl.flex.justify-center.items-center.cursor-pointer(
+    :class='paddingClass'
+    @click="onClickToggle"
+  ) ...
 
+  //- MoreOptions
   transition(name="fade")
     div(
-      v-show="show"
-      class="absolute top-full right-0 z-10 mt-2 w-36 bg-white rounded-lg shadow-lg p-1 ring-1 ring-black ring-opacity-5"
+      v-if="show"
+      class="w-40 flex flex-col absolute bg-[#1a1a1a] text-white border border-gray-600 rounded-md top-9 -right-5 z-10 overflow-hidden"
     )
-      // メニュー項目：イベント発生
-      div(class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" @click="$emit('edit')")
-        // アイコン + テキスト
-        span 編集
-      div(class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" @click="$emit('bookmark')")
-        // アイコン + テキスト
-        span ブックマーク
-      div(class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" @click="$emit('delete')")
-        // アイコン + テキスト
-        span 削除
+      transition-group(
+        name="staggered-fade"
+        tag="div"
+        appear
+      )
+        .w-full.flex.justify-center.items-center.cursor-pointer.py-3.px-2(
+          v-for="(item, index) in menuItems"
+          :key="item"
+          :style="{ '--i': index }"
+          class="hover:bg-gray-700"
+        ) {{ item }}
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
+import { defineComponent, ref, watch, onBeforeUnmount } from 'vue';
 
 export default defineComponent({
   name: 'MoreOptions',
+  props: {
+    paddingClass: {
+      type: String,
+      required: true,
+    },
+  },
   emits: ['edit', 'bookmark', 'delete'],
   setup() {
     const show = ref(false);
+    const menuItems = ref(['ブックマーク', '編集', '削除', 'コピー']);
     const moreOptionsRef = ref<HTMLElement | null>(null);
 
-    const toggle = () => {
+    const onClickToggle = () => {
       show.value = !show.value;
     };
 
@@ -45,17 +55,22 @@ export default defineComponent({
       }
     };
 
-    onMounted(() => {
-      document.addEventListener('click', handleClickOutside);
+    watch(show, value => {
+      if (value) {
+        document.addEventListener('mousedown', handleClickOutside);
+      } else {
+        document.removeEventListener('mousedown', handleClickOutside);
+      }
     });
 
     onBeforeUnmount(() => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     });
 
     return {
       show,
-      toggle,
+      menuItems,
+      onClickToggle,
       moreOptionsRef,
     };
   },
@@ -74,5 +89,18 @@ export default defineComponent({
 .fade-leave-to {
   transform: scaleY(0.9);
   opacity: 0;
+}
+
+.staggered-fade-enter-active,
+.staggered-fade-leave-active {
+  transition: all 0.4s ease;
+}
+.staggered-fade-enter-active {
+  transition-delay: calc(0.07s * var(--i));
+}
+.staggered-fade-enter-from,
+.staggered-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-15px);
 }
 </style>

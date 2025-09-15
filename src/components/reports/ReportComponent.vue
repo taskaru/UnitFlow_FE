@@ -2,37 +2,22 @@
 .grid.gap-4.justify-start.w-full(
   class="grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]"
 )
-  // 日報カード
-  div(
-    class="h-[350px] relative"
+  //- 日報カード
+  .rounded-2xl.shadow-xl.p-2.flex.flex-col.bg-space-gray(
     v-for="(data, i) in dataSource"
+    class="h-[21rem] relative"
     :key="i"
-    @mouseenter="showOptions = i"
-    @mouseleave="showOptions = -1"
   )
-    //- もっと見るオプション
-    .absolute.top-2.right-2.z-10
-      MoreOptions(
-        v-show="showOptions === i"
-        @edit="onEdit"
-        @bookmark="onBookMark"
-        @delete="onDelete"
-      )
-    // 日報カード
-    .w-full.h-full.bg-white.rounded-2xl.shadow-xl.p-2.flex.flex-col
-      // name + profile
-      .flex.flex-row.justify-start.items-center.mb-2
-        // profile
-        .w-6.h-6.rounded-full
-          img.w-full.h-full.object-contain(src="../../assets/i-google.svg")
-        // name
-        .text-lg.text-gray-500 {{ data.name }}
-      // 日報の日付
-      h3.text-lg.font-bold {{ data.title }}
-      // 感想文
-      p.text-sm.text-gray-700.mt-2.overflow-hidden(:style="clampStyle")
-        | {{ data.description }}
- 
+    //- Unit + MoreOptions
+    .w-full.h-10.flex
+      .w-80.bg-black
+      //- Unit
+      .w-20.flex.justify-center.items-center
+        //- もっと見る
+        MoreOptions(
+          paddingClass="pb-5 pl-7"
+        )
+    
 </template>
 
 <script lang="ts">
