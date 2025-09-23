@@ -63,7 +63,7 @@ export default defineComponent({
     function handleMenuClick(menu: string) {
       const eventName = eventMap[menu];
       if (eventName) {
-        emit(eventName as 'edit' | 'bookmark' | 'delete' | 'detail');
+        emit(eventName as 'bookmark' | 'edit' | 'delete' | 'detail');
       }
       show.value = false;
     }
@@ -88,6 +88,9 @@ export default defineComponent({
       }
     }
 
+    /**
+     * もっと見るの外側を押下した際にもっと見るを閉じる処理
+     */
     watch(show, value => {
       if (value) {
         document.addEventListener('mousedown', handleClickOutside);

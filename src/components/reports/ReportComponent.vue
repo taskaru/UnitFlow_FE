@@ -21,7 +21,7 @@
           @bookmark="onBookMark"
           @edit="onEdit"
           @delete="onDelete"
-          @detail="onClickDetail"
+          @detail="onDetail"
         )
     //- name
     .w-full.h-10.flex.items-center.pl-2.font-bold.text-lg
@@ -67,7 +67,7 @@ export default defineComponent({
       required: false,
     },
   },
-  emits: ['bookmark', 'detail', 'edit', 'delete'],
+  emits: ['bookmark', 'edit', 'delete', 'detail'],
   setup(props, ctx) {
     const { emit } = ctx;
     const showOptions = ref(-1);
@@ -86,16 +86,17 @@ export default defineComponent({
     }));
 
     /**
-     * 編集イベントをemitする
-     */
-    function onEdit() {
-      emit('edit');
-    }
-    /**
      * ブックマークイベントをemitする
      */
     function onBookMark() {
       emit('bookmark');
+    }
+
+    /**
+     * 編集イベントをemitする
+     */
+    function onEdit() {
+      emit('edit');
     }
 
     /**
@@ -108,7 +109,7 @@ export default defineComponent({
     /**
      * 詳細イベントをemitする
      */
-    function onClickDetail() {
+    function onDetail() {
       emit('detail');
     }
 
@@ -118,7 +119,7 @@ export default defineComponent({
       onEdit,
       onBookMark,
       onDelete,
-      onClickDetail,
+      onDetail,
       showOptions,
       clampStyle,
     };

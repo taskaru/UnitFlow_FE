@@ -11,6 +11,10 @@ div.h-screen.flex.bg-black.p-4
     main.w-full.flex-1.overflow-y-auto.min-h-0.px-3
       ReportComponent(
         :line-num="10"
+        @bookmark="onBookmark"
+        @edit="onEdit"
+        @delete="onDelete"
+        @detail="onDetail"
       )
 </template>
 
@@ -29,24 +33,47 @@ export default defineComponent({
     ReportComponent,
   },
   setup() {
-    const onBookmark = () => {
-      return;
-    };
-    const onOpen = () => {
-      return;
-    };
-    const onEdit = () => {
-      return;
-    };
-    const onDelete = () => {
-      return;
-    };
+    /**
+     * ブックマークを押下した際の処理
+     * ミドルTodo
+     */
+    function onBookmark() {
+      // eslint-disable-next-line no-console
+      console.log('click onBookmark');
+    }
+
+    /**
+     * 編集ボタンを押下した際の処理
+     * ミドルTodo
+     */
+    function onEdit() {
+      // eslint-disable-next-line no-console
+      console.log('click onEdit');
+    }
+
+    /**
+     * 削除ボタンを押下した際の処理
+     * ミドルTodo
+     */
+    function onDelete() {
+      // eslint-disable-next-line no-console
+      console.log('click onDelete');
+    }
+
+    /**
+     * 詳細ボタンを押下した際の処理
+     * ミドルTodo
+     */
+    function onDetail() {
+      // eslint-disable-next-line no-console
+      console.log('click onDetail');
+    }
 
     return {
       onBookmark,
-      onOpen,
       onEdit,
       onDelete,
+      onDetail,
     };
   },
 });
