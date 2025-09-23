@@ -16,14 +16,19 @@ div.h-screen.flex.bg-black.p-4
         @delete="onDelete"
         @detail="onDetail"
       )
+  //- レポート詳細画面
+  ReportDetailComponent
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+// required compnents
 import SidebarComponent from '../../components/SidebarComponent.vue';
 import HeaderComponent from '../../components/HeaderComponent.vue';
 
+// related report component
 import ReportComponent from '../../components/reports/ReportComponent.vue';
+import ReportDetailComponent from '@/pages/reports/detail/index.vue';
 
 export default defineComponent({
   name: 'ReportsPage',
@@ -31,6 +36,7 @@ export default defineComponent({
     SidebarComponent,
     HeaderComponent,
     ReportComponent,
+    ReportDetailComponent,
   },
   setup() {
     /**
