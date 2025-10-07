@@ -1,21 +1,21 @@
 <template lang="pug">
 .w-screen.h-screen.fixed.inset-0.z-50.pointer-events-none
-  .absolute.inset-0(
+  //- 背景を黒くする要素
+  .absolute.inset-0.z-10(
     v-show="state.isVisible"
     class="bg-black/50 pointer-events-auto"
   )
-
-  // overlay content container
-  .relative.z-20.flex.pointer-events-none
-    .h-screen(
-      class="w-1/2"
+  //- 日報の詳細
+  transition(name="slide-overlay")
+    .h-screen.bg-white.absolute.right-0.pointer-events-auto.z-20(
+      v-if="state.isVisible"
+      :class="['duration-300 ease-in-out transition-[width]', screenSize]"
     )
-    // sliding panel
-    transition(name="slide-overlay")
-      .h-screen.bg-white.pointer-events-auto(
-        v-if="state.isVisible"
-        class="w-1/2"
+      //- header
+      .w-full.h-12.cursor-pointer.px-4(
+        @click="onClickScreensize"
       )
+        | <<<
 </template>
 
 <script lang="ts">
@@ -26,10 +26,12 @@ export default defineComponent({
   name: 'ReportDetailPage',
   components: {},
   setup() {
-    const { state } = useReportDetailLogic();
+    const { state, screenSize, onClickScreensize } = useReportDetailLogic();
 
     return {
       state,
+      screenSize,
+      onClickScreensize,
     };
   },
 });
