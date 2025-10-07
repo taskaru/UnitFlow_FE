@@ -1,10 +1,10 @@
 import { ref } from 'vue';
 
-export function useReportDetailLogic() {
-  const state = ref({
-    isVisible: false,
-  });
+const state = ref({
+  isVisible: false,
+});
 
+export function useReportDetailLogic() {
   return {
     state,
   };

@@ -1,5 +1,5 @@
 <template lang="pug">
-div.h-screen.flex.bg-black.p-4
+div.h-screen.flex.bg-black.p-4.relative
   SidebarComponent
   // 右コンテンツバー
   .wrapper.dark.flex.flex-col(
@@ -30,6 +30,9 @@ import HeaderComponent from '../../components/HeaderComponent.vue';
 import ReportComponent from '../../components/reports/ReportComponent.vue';
 import ReportDetailComponent from '@/pages/reports/detail/index.vue';
 
+// logics
+import { useReportDetailLogic } from '@/composables/reports/detail/logic';
+
 export default defineComponent({
   name: 'ReportsPage',
   components: {
@@ -39,6 +42,8 @@ export default defineComponent({
     ReportDetailComponent,
   },
   setup() {
+    const { state } = useReportDetailLogic();
+
     /**
      * ブックマークを押下した際の処理
      * ミドルTodo
@@ -71,8 +76,7 @@ export default defineComponent({
      * ミドルTodo
      */
     function onDetail() {
-      // eslint-disable-next-line no-console
-      console.log('click onDetail');
+      state.value.isVisible = true;
     }
 
     return {

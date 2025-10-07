@@ -23,7 +23,7 @@
         appear
         class="overflow-hidden rounded-md relative z-10"
       )
-        .w-full.flex.justify-center.items-center.cursor-pointer.py-3.px-2.border-b.border-gray-600(
+        .w-full.flex.justify-center.items-center.cursor-pointer.py-3.px-2.border-b.border-gray-600.text-sm(
           v-for="(menu, index) in menus"
           :key="menu"
           :style="{ '--i': index }"
