@@ -10,7 +10,7 @@ div.h-screen.flex.bg-black.p-4
     )
     main.w-full.flex-1.overflow-y-auto.min-h-0.px-3
       ReportComponent(
-        :line-num="10"
+        :line-num="11"
         @bookmark="onBookmark"
         @edit="onEdit"
         @delete="onDelete"

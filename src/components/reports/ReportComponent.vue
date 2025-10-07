@@ -11,7 +11,7 @@
     //- Unit + MoreOptions
     .w-full.h-10.flex
       .w-80.pl-1.flex.items-center
-        .w-auto.bg-gray-100.color-yellow.flex.items-center.py-1.px-6.rounded-2xl
+        .w-auto.bg-gray-100.color-yellow.flex.items-center.px-6.rounded-2xl
           | {{ data.unit }}
       //- Unit
       .w-20.flex.justify-center.items-center
@@ -27,7 +27,7 @@
     .w-full.h-10.flex.items-center.pl-2.font-bold.text-lg
       | {{data.name}}
     //- description
-    .w-full.h-full.px-2.opacity-75(
+    .w-full.h-56.px-2.opacity-75.text-sm(
       class="h-[15rem]"
       :style="clampStyle"
     )
