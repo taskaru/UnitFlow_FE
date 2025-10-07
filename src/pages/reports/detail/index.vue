@@ -15,7 +15,7 @@
       .w-full.h-12.cursor-pointer.px-4(
         @click="onClickScreensize"
       )
-        | <<<
+        | {{ state.isFullWidth ? "➡️" : "⬅️"}}
 </template>
 
 <script lang="ts">
