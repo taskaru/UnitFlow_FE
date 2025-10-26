@@ -43,15 +43,14 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['edit', 'bookmark', 'delete', 'detail'],
+  emits: ['bookmark', 'delete', 'detail'],
   setup(_, { emit }) {
     const show = ref(false);
-    const menus = ref(['ブックマーク', '編集', '削除', '詳細']);
+    const menus = ref(['ブックマーク', '削除', '詳細']);
     const moreOptionsRef = ref<HTMLElement | null>(null);
 
     const eventMap: { [key: string]: string } = {
       ブックマーク: 'bookmark',
-      編集: 'edit',
       削除: 'delete',
       詳細: 'detail',
     };
@@ -63,7 +62,7 @@ export default defineComponent({
     function handleMenuClick(menu: string) {
       const eventName = eventMap[menu];
       if (eventName) {
-        emit(eventName as 'bookmark' | 'edit' | 'delete' | 'detail');
+        emit(eventName as 'bookmark' | 'delete' | 'detail');
       }
       show.value = false;
     }
