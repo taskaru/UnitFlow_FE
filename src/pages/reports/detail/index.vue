@@ -4,20 +4,36 @@
   .absolute.inset-0.z-10(
     v-show="state.isVisible"
     class="bg-black/50 pointer-events-auto"
+    @click="state.isVisible = false"
+  )
+  //- Blank area for click-to-close (left side)
+  .absolute.inset-0.z-15.pointer-events-auto(
+    v-show="state.isVisible"
+    @click="state.isVisible = false"
+    :class="state.isFullWidth ? 'w-1/4' : 'w-1/2'"
+    style="left: 0; right: auto;"
   )
   //- 日報の詳細
   transition(name="slide-overlay")
-    .h-screen.bg-white.absolute.right-0.pointer-events-auto.z-20(
+    .h-screen.bg-white.absolute.right-0.pointer-events-auto.z-20.flex.flex-col(
       v-if="state.isVisible"
       :class="['duration-300 ease-in-out transition-[width]', screenSize]"
     )
       //- header
-      .w-full.h-12.cursor-pointer.px-4.flex(
-        @click="onClickScreensize"
-      )
-        | {{ state.isFullWidth ? "➡️" : "⬅️"}} 日報詳細ページ
+      .w-full.h-12.px-4.flex.items-center.justify-between.bg-gray-100.border-b.flex-shrink-0
+        .flex.items-center.cursor-pointer(
+           @click="onClickScreensize"
+        )
+          | {{ state.isFullWidth ? "➡️" : "⬅️"}} 日報詳細ページ
+        .cursor-pointer.text-gray-500(
+           :class="['hover:text-gray-700.text-xl']"
+           @click="state.isVisible = false"
+        )
+          | ✕
       //- report content
-      .w-full.p-6.space-y-6
+      .flex-1.overflow-y-auto.p-6.space-y-6.bg-white(
+        @click.stop
+      )
         //- 業務内容
         .space-y-2
           .text-xl.font-semibold.text-gray-800 ◼︎業務内容
@@ -100,7 +116,7 @@ export default defineComponent({
     const focusTextarea = async (field: string) => {
       await nextTick();
       const textarea = document.querySelector(
-        `[ref="${field}Textarea"]`
+        `textarea[ref="${field}Textarea"]`
       ) as HTMLTextAreaElement;
       if (textarea) {
         textarea.focus();
